@@ -1,8 +1,8 @@
 ExPrintf
 ============
-A printf/sprintf library for Elixir. It works like wrapper for :io.format.
+A printf / sprintf library for Elixir. It works as a wrapper for :io.format.
 
-When learning Elixir/Erlang, remembering :io.format style is a little tough. This one can be used as syntax sugar, or it can be parsed to Erlang's format.
+When learning Elixir/Erlang, remembering :io.format style is a little tough. This one can be used as syntax sugar, or util to convert printf format to Elixir (Erlang) one.
 
 # Examples
 
@@ -10,7 +10,7 @@ When learning Elixir/Erlang, remembering :io.format style is a little tough. Thi
 
 ```elixir
 defmodule Sample do
-  import :all, ExPrintf
+  import ExPrintf
 
   def test do
     printf("number = %d\n", [10])  # -> number = 10
@@ -38,6 +38,7 @@ format = 10 10.15
 ## iex
 
 ```
+$ git clone git@github.com:parroty/exprintf.git
 $ cd exprintf
 $ ./run_iex.sh
 $ iex(1) -> parse_printf("%d")
