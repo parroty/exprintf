@@ -2,7 +2,7 @@ ExPrintf [![Build Status](https://secure.travis-ci.org/parroty/exprintf.png?bran
 ============
 A printf / sprintf library for Elixir. It works as a wrapper for :io.format.
 
-When learning Elixir/Erlang, remembering :io.format style is a little tough. This one can be used as syntax sugar, or an util to convert printf format to Elixir (Erlang) one.
+When learning Elixir / Erlang, remembering :io.format style is a little tough. This one can be used as syntax sugar, or an util to convert printf format to Elixir (Erlang) one.
 
 # Examples
 
