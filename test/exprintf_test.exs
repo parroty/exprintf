@@ -68,8 +68,8 @@ defmodule ExPrintfTest do
     assert(sprintf("%0i", [10])  == "10")
   end
 
-  test "%b - unsigned integer" do
-    assert(parse_printf("%b") == "~.2b")
+  test "%b - unsigned integer in binary" do
+    assert(parse_printf("%b")     == "~.2b")
 
     assert(sprintf("%b", [10])    == "1010")
     assert(sprintf("%10b", [10])  == String.duplicate(" ", 6) <> "1010")
@@ -89,9 +89,9 @@ defmodule ExPrintfTest do
   end
 
   test "%x - unsigned integer in hexadecimal" do
-    assert(parse_printf("%x") == "~.16b")
-    assert(parse_printf("%10x") == "~10.16b")
-    assert(parse_printf("%010x") == "~10.16.0b")
+    assert(parse_printf("%x")       == "~.16b")
+    assert(parse_printf("%10x")     == "~10.16b")
+    assert(parse_printf("%010x")    == "~10.16.0b")
 
     assert(sprintf("%x", [1000])    == "3e8")
     assert(sprintf("%10x", [1000])  == String.duplicate(" ", 7) <> "3e8")
@@ -101,9 +101,9 @@ defmodule ExPrintfTest do
   end
 
   test "%X - unsigned integer in hexadecimal with capitalized" do
-    assert(parse_printf("%X") == "~.16B")
-    assert(parse_printf("%10X") == "~10.16B")
-    assert(parse_printf("%010X") == "~10.16.0B")
+    assert(parse_printf("%X")       == "~.16B")
+    assert(parse_printf("%10X")     == "~10.16B")
+    assert(parse_printf("%010X")    == "~10.16.0B")
 
     assert(sprintf("%X", [1000])    == "3E8")
     assert(sprintf("%10X", [1000])  == String.duplicate(" ", 7) <> "3E8")
@@ -113,8 +113,8 @@ defmodule ExPrintfTest do
   end
 
   test "%e - float in 1.00000e+01 format" do
-    assert(parse_printf("%e") == "~e")
-    assert(parse_printf("%.3e") == "~.4e")
+    assert(parse_printf("%e")      == "~e")
+    assert(parse_printf("%.3e")    == "~.4e")
 
     assert(sprintf("%e", [10.0])   == "1.00000e+1")
     assert(sprintf("%e", [0.1])    == "1.00000e-1")
