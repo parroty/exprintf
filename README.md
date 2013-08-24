@@ -1,4 +1,4 @@
-ExPrintf
+ExPrintf [![Build Status](https://secure.travis-ci.org/parroty/exprintf.png?branch=master "Build Status")](http://travis-ci.org/parroty/exprintf)
 ============
 A printf / sprintf library for Elixir. It works as a wrapper for :io.format.
 
@@ -25,7 +25,7 @@ end
 Sample.test
 ```
 
-## Execution
+## Sample Execution
 
 ```
 $ mix run sample.ex
