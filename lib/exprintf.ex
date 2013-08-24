@@ -1,6 +1,6 @@
 defmodule ExPrintf do
   @moduledoc """
-  A printf/sprintf library for Elixir. It works like wrapper for :io.format.
+  A printf/sprintf library for Elixir. It works as a wrapper for :io.format.
   """
 
   defrecord State,
@@ -17,8 +17,8 @@ defmodule ExPrintf do
   @record_index_period  6
 
   @doc """
-  prints the parsed string to stdout based the printf-formatted input parameters.
-  params argument needs to be List.
+  Prints the parsed string to stdout based the printf-formatted input parameters.
+  The params argument needs to be List.
 
   ## Examples
 
@@ -27,7 +27,7 @@ defmodule ExPrintf do
       :ok
 
   """
-  def printf(format, params) when is_list(params) do
+  def printf(format, params // []) when is_list(params) do
     IO.write sprintf(format, params)
   end
 
@@ -35,21 +35,17 @@ defmodule ExPrintf do
     raise_param_error("printf")
   end
 
-  def printf(format) do
-    printf(format, [])
-  end
-
   @doc """
-  returns the parsed string based on the printf-formatted input parameters.
-  params argument needs to be List.
+  Returns the parsed string based on the printf-formatted input parameters.
+  The params argument needs to be List.
 
   ## Examples
 
       iex> sprintf("%d\\n", [10])
-      "10\n"
+      "10\\n"
 
   """
-  def sprintf(format, params) when is_list(params) do
+  def sprintf(format, params // []) when is_list(params) do
     char_list = :io_lib.format(parse_printf(format), params)
     String.from_char_list!(char_list)
   end
@@ -58,22 +54,18 @@ defmodule ExPrintf do
     raise_param_error("sprintf")
   end
 
-  def sprintf(format) do
-    sprintf(format, [])
-  end
-
   defp raise_param_error(function_name) do
     raise "The 2nd argument needs to be List: ex. #{function_name}(\"%d\", [10])"
   end
 
   @doc """
-  returns the Elixir's :io.format string based on the printf-formatted input parameters.
-  params argument needs to be List.
+  Returns the Elixir's :io.format string based on the printf-formatted input parameters.
+  The params argument needs to be List.
 
   ## Examples
 
       iex> parse_printf("%05d\\n")
-      "~5..0B\n"
+      "~5..0B\\n"
 
   """
   def parse_printf(format) do
