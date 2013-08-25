@@ -48,3 +48,4 @@ $ iex(1) -> parse_printf("%d")
 ## TODO
 - Improve error checking
 - Improve format support coverage
+  - sprintf("%05d", [-10]) results in "00-10", instead of "-00010".
