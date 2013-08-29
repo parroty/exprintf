@@ -72,6 +72,10 @@ defmodule ExPrintf do
     parse_format(format, [], State.new)
   end
 
+  defp parse_format(<<>>, acc, state) when elem(state, @record_index_percent) == true do
+    raise ArgumentError.new(message: "malformed format string - not ending %")
+  end
+
   defp parse_format(<<>>, acc, _state) do
     Enum.join(Enum.reverse(acc), "")
   end

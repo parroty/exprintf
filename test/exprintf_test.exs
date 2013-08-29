@@ -167,6 +167,16 @@ defmodule ExPrintfTest do
     end
   end
 
+  test "parse non-ending % fails" do
+    assert_raise ArgumentError, "malformed format string - not ending %", fn ->
+      sprintf("%")
+    end
+
+    assert_raise ArgumentError, "malformed format string - not ending %", fn ->
+      sprintf("%d%", [10])
+    end
+  end
+
   test "printf" do
     assert capture_io(fn ->
       printf("%d %s", [10, "abc"])
