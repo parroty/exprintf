@@ -45,6 +45,11 @@ $ iex(1) -> parse_printf("%d")
 "~w"
 ```
 
+## Dynamo
+The following hosts a sample dynamo application for the printf format conversion.
+
+<a href="http://dynamo-exprintf.herokuapp.com/" target="_blank">http://dynamo-exprintf.herokuapp.com/</a>
+
 ## TODO
 - Improve error checking
 - Improve format support coverage
