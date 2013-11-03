@@ -95,11 +95,11 @@ defmodule ExPrintf do
         parse_format(tail, acc, state.update(padding: true))
 
       # numbers before period
-      head in ?0..?9 when elem(state, @record_index_period) == false ->
+      head when head in ?0..?9 and elem(state, @record_index_period) == false ->
         parse_format(tail, acc, state.update(width: (state.width * 10 + (head - ?0))))
 
       # numbers after period
-      head in ?0..?9 when elem(state, @record_index_period) == true ->
+      head when head in ?0..?9 and elem(state, @record_index_period) == true ->
         parse_format(tail, acc, state.update(precision: (state.precision * 10 + (head - ?0))))
 
       ?- -> parse_format(tail, acc, state.update(negative: true))
