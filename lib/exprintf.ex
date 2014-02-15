@@ -27,7 +27,7 @@ defmodule ExPrintf do
       :ok
 
   """
-  def printf(format, params // []) when is_list(params) do
+  def printf(format, params \\ []) when is_list(params) do
     IO.write sprintf(format, params)
   end
 
@@ -45,7 +45,7 @@ defmodule ExPrintf do
       "10\\n"
 
   """
-  def sprintf(format, params // []) when is_list(params) do
+  def sprintf(format, params \\ []) when is_list(params) do
     char_list = :io_lib.format(parse_printf(format), params)
     String.from_char_list!(char_list)
   end
@@ -135,7 +135,7 @@ defmodule ExPrintf do
     State.new
   end
 
-  defp handle_options(state, char, option // nil) do
+  defp handle_options(state, char, option \\ nil) do
     cond do
       # conversion for zero-padding
       char == "w" and has_padding(state)   -> "~#{do_handle_options(state)}..0B"
@@ -164,7 +164,7 @@ defmodule ExPrintf do
   defp has_width(state),     do: state.width > 0
   defp has_precision(state), do: state.precision > 0
 
-  defp do_handle_options(state, offset // [precision: 0]) do
+  defp do_handle_options(state, offset \\ [precision: 0]) do
     sign      = get_sign_chars(state.negative)
     width     = get_width_chars(state.width)
     precision = get_precision_chars(state.precision + offset[:precision])
