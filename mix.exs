@@ -3,9 +3,12 @@ defmodule ExPrintf.Mixfile do
 
   def project do
     [ app: :exprintf,
-      version: "0.0.1",
-      elixir: ">= 0.10.2-dev",
-      deps: deps ]
+      version: "0.1.0",
+      elixir: "~> 0.13.0",
+      deps: deps,
+      description: description,
+      package: package
+    ]
   end
 
   # Configuration for the OTP application
@@ -17,5 +20,17 @@ defmodule ExPrintf.Mixfile do
   # { :foobar, "~> 0.1", git: "https://github.com/elixir-lang/foobar.git" }
   defp deps do
     []
+  end
+
+  defp description do
+    """
+    A printf / sprintf library for Elixir. It works as a wrapper for :io.format.
+    """
+  end
+
+  defp package do
+    [ contributors: ["parroty"],
+      licenses: ["MIT"],
+      links: [ { "GitHub", "https://github.com/parroty/exprintf" } ] ]
   end
 end
