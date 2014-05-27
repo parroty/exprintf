@@ -3,18 +3,14 @@ defmodule ExPrintf do
   A printf/sprintf library for Elixir. It works as a wrapper for :io.format.
   """
 
-  defrecord State,
-    percent: false,   # becomes true after % is parsed
-    width: 0,         # size of width (ex. %5d)
-    precision: 0,     # size of precision (ex. %.5f)
-    padding: false,   # becomes true if prefixed with zero (ex. %05d)
-    negative: false,  # becomes true if negative value is specified (ex. %-5d)
-    period: false     # becomes true after . is parsed
-
-  # index number for record fields
-  @record_index_percent 1
-  @record_index_width   2
-  @record_index_period  6
+  defmodule State do
+    defstruct percent: false,   # becomes true after % is parsed
+              width: 0,         # size of width (ex. %5d)
+              precision: 0,     # size of precision (ex. %.5f)
+              padding: false,   # becomes true if prefixed with zero (ex. %05d)
+              negative: false,  # becomes true if negative value is specified (ex. %-5d)
+              period: false     # becomes true after . is parsed
+  end
 
   @doc """
   Prints the parsed string to stdout based the printf-formatted input parameters.
@@ -69,58 +65,61 @@ defmodule ExPrintf do
 
   """
   def parse_printf(format) do
-    parse_format(format, [], State.new)
+    parse_format(format, [], %State{})
   end
 
-  defp parse_format(<<>>, _acc, state) when elem(state, @record_index_percent) == true do
-    raise ArgumentError.new(message: "malformed format string - not ending %")
+  defp parse_format(<<>>, _acc, %State{percent: true} = _state) do
+    raise %ArgumentError{message: "malformed format string - not ending %"}
   end
 
   defp parse_format(<<>>, acc, _state) do
     Enum.join(Enum.reverse(acc), "")
   end
 
-  defp parse_format(<< head :: utf8, tail :: binary >>, acc, state) when elem(state, @record_index_percent) == false do
+  defp parse_format(<< head :: utf8, tail :: binary >>, acc, %State{percent: false} = state) do
     case head do
-      ?%   -> parse_format(tail, acc, state.update(percent: true))
+      ?%   -> parse_format(tail, acc, %{state | percent: true})
       ?~   -> parse_format(tail, ["~~" | acc], state)
       char -> parse_format(tail, [<<char>> | acc], state)
     end
   end
 
-  defp parse_format(<< head :: utf8, tail :: binary >>, acc, state) when elem(state, @record_index_percent) == true do
-    case head do
+  defp parse_format(<< head :: utf8, tail :: binary >>, acc, %State{percent: true} = state) do
+    cond do
       # prefixed zero
-      ?0 when elem(state, @record_index_width) == 0 ->
-        parse_format(tail, acc, state.update(padding: true))
+      head == ?0 and state.width == 0 ->
+        parse_format(tail, acc, %{state | padding: true})
 
       # numbers before period
-      head when head in ?0..?9 and elem(state, @record_index_period) == false ->
-        parse_format(tail, acc, state.update(width: (state.width * 10 + (head - ?0))))
+      head in ?0..?9 and state.period == false ->
+        parse_format(tail, acc, %{state | width: (state.width * 10 + (head - ?0))})
 
       # numbers after period
-      head when head in ?0..?9 and elem(state, @record_index_period) == true ->
-        parse_format(tail, acc, state.update(precision: (state.precision * 10 + (head - ?0))))
+      head in ?0..?9 and state.period == true ->
+        parse_format(tail, acc, %{state | precision: (state.precision * 10 + (head - ?0))})
 
-      ?- -> parse_format(tail, acc, state.update(negative: true))
-      ?. -> parse_format(tail, acc, state.update(period: true))
-      ?% -> parse_format(tail, ["%" | acc], reset(state))
+      true ->
+        case head do
+          ?- -> parse_format(tail, acc, %{state | negative: true})
+          ?. -> parse_format(tail, acc, %{state | period: true})
+          ?% -> parse_format(tail, ["%" | acc], reset(state))
 
-      ?d -> parse_character("w", tail, acc, state)
-      ?i -> parse_character("w", tail, acc, state)
-      ?s -> parse_character("s", tail, acc, state)
-      ?f -> parse_character("f", tail, acc, state)
-      ?g -> parse_character("g", tail, acc, state)
-      ?c -> parse_character("c", tail, acc, state)
-      ?e -> parse_character("e", tail, acc, state)
+          ?d -> parse_character("w", tail, acc, state)
+          ?i -> parse_character("w", tail, acc, state)
+          ?s -> parse_character("s", tail, acc, state)
+          ?f -> parse_character("f", tail, acc, state)
+          ?g -> parse_character("g", tail, acc, state)
+          ?c -> parse_character("c", tail, acc, state)
+          ?e -> parse_character("e", tail, acc, state)
 
-      ?b -> parse_character("b",  2, tail, acc, state)
-      ?o -> parse_character("b",  8, tail, acc, state)
-      ?x -> parse_character("b", 16, tail, acc, state)
-      ?X -> parse_character("B", 16, tail, acc, state)
+          ?b -> parse_character("b",  2, tail, acc, state)
+          ?o -> parse_character("b",  8, tail, acc, state)
+          ?x -> parse_character("b", 16, tail, acc, state)
+          ?X -> parse_character("B", 16, tail, acc, state)
 
-      _  -> raise ArgumentError.new(message: "malformed format string - %#{<<head>>}")
-    end
+          _  -> raise %ArgumentError{message: "malformed format string - %#{<<head>>}"}
+        end
+      end
   end
 
   defp parse_character(type, tail, acc, state) do
@@ -132,7 +131,7 @@ defmodule ExPrintf do
   end
 
   defp reset(_state) do
-    State.new
+    %State{}
   end
 
   defp handle_options(state, char, option \\ nil) do
