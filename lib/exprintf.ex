@@ -43,7 +43,7 @@ defmodule ExPrintf do
   """
   def sprintf(format, params \\ []) when is_list(params) do
     char_list = :io_lib.format(parse_printf(format), params)
-    String.from_char_data!(char_list)
+    List.to_string(char_list)
   end
 
   def sprintf(_format, _params) do

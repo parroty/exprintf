@@ -4,7 +4,7 @@ defmodule ExPrintf.Mixfile do
   def project do
     [ app: :exprintf,
       version: "0.1.2",
-      elixir: "~> 0.13.3",
+      elixir: "~> 0.14.0",
       deps: deps,
       description: description,
       package: package
