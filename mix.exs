@@ -31,6 +31,6 @@ defmodule ExPrintf.Mixfile do
   defp package do
     [ contributors: ["parroty"],
       licenses: ["MIT"],
-      links: [ { "GitHub", "https://github.com/parroty/exprintf" } ] ]
+      links: %{ "GitHub" => "https://github.com/parroty/exprintf" }]
   end
 end
