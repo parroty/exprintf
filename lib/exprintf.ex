@@ -147,6 +147,9 @@ defmodule ExPrintf do
       char == "b" and has_padding(state)   -> "~#{do_handle_options(state)}.#{option}.0b"
       char == "B" and has_padding(state)   -> "~#{do_handle_options(state)}.#{option}.0B"
 
+      # handling for digits precision
+      char == "w" and has_precision(state) -> "~#{do_handle_options(state, [precision: 0, digits: true])}..0B"
+
       # handling for characters
       char == "c" and has_width(state)     ->  "~#{do_handle_options(state)}.1c"
 
@@ -167,12 +170,17 @@ defmodule ExPrintf do
   defp has_width(state),     do: state.width > 0
   defp has_precision(state), do: state.precision > 0
 
-  defp do_handle_options(state, offset \\ [precision: 0])
+  defp do_handle_options(state, options \\ [precision: 0])
   
-  defp do_handle_options(state, offset) do
+  defp do_handle_options(state, options) do
+    # If we have digits with precision (e.g %0.4d) we interpret it as padding
+    if options[:digits] == true do
+      state = %{state | padding: true, width: state.precision, precision: 0}
+    end
+    
     sign      = get_sign_chars(state.negative)
     width     = get_width_chars(state.width)
-    precision = get_precision_chars(state.precision + offset[:precision])
+    precision = get_precision_chars(state.precision + options[:precision])
 
     "#{sign}#{width}#{precision}"
   end

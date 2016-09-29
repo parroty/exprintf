@@ -14,6 +14,7 @@ defmodule ExPrintfTest do
     assert(sprintf("%-5d", [10]) == "10" <> String.duplicate(" ", 3))
     assert(sprintf("%05d", [10]) == String.duplicate("0", 3) <> "10")
     assert(sprintf("%0d", [10])  == "10")
+    assert(sprintf("%0.4d", [10]) == "0010")
   end
 
   test "%s - string" do
