@@ -110,7 +110,7 @@ defmodule ExPrintf do
 
           ?d -> parse_character("w", tail, acc, state)
           ?i -> parse_character("w", tail, acc, state)
-          ?s -> parse_character("s", tail, acc, state)
+          ?s -> parse_character("ts", tail, acc, state)
           ?f -> parse_character("f", tail, acc, state)
           ?g -> parse_character("g", tail, acc, state)
           ?c -> parse_character("c", tail, acc, state)
