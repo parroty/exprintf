@@ -174,8 +174,9 @@ defmodule ExPrintf do
   
   defp do_handle_options(state, options) do
     # If we have digits with precision (e.g %0.4d) we interpret it as padding
-    if options[:digits] == true do
-      state = %{state | padding: true, width: state.precision, precision: 0}
+    state = case options[:digits] do
+      true -> %{state | padding: true, width: state.precision, precision: 0}
+      _    -> state
     end
     
     sign      = get_sign_chars(state.negative)
