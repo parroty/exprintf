@@ -3,8 +3,8 @@ defmodule ExPrintf.Mixfile do
 
   def project do
     [ app: :exprintf,
-      version: "0.1.6",
-      elixir: "~> 0.14.3 or ~> 0.15.0 or ~> 1.0",
+      version: "0.2.0",
+      elixir: "~> 1.0",
       deps: deps,
       description: description,
       package: package
@@ -19,7 +19,7 @@ defmodule ExPrintf.Mixfile do
   # Returns the list of dependencies in the format:
   # { :foobar, "~> 0.1", git: "https://github.com/elixir-lang/foobar.git" }
   defp deps do
-    []
+    [{:ex_doc, ">= 0.0.0", only: :dev}]
   end
 
   defp description do
@@ -29,8 +29,8 @@ defmodule ExPrintf.Mixfile do
   end
 
   defp package do
-    [ contributors: ["parroty"],
+    [ maintainers: ["parroty"],
       licenses: ["MIT"],
-      links: %{ "GitHub" => "https://github.com/parroty/exprintf" }]
+      links: %{"GitHub" => "https://github.com/parroty/exprintf"} ]
   end
 end

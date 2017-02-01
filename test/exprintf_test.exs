@@ -18,15 +18,21 @@ defmodule ExPrintfTest do
   end
 
   test "%s - string" do
-    assert(parse_printf("%s")    == "~s")
-    assert(parse_printf("%15s")  == "~15s")
-    assert(parse_printf("%010s") == "~10s")
+    assert(parse_printf("%s")    == "~ts")
+    assert(parse_printf("%15s")  == "~15ts")
+    assert(parse_printf("%010s") == "~10ts")
 
     assert(sprintf("%s", ["abc"])    == "abc")
     assert(sprintf("%15s", ["abc"])  == String.duplicate(" ", 12) <> "abc")
     assert(sprintf("%-15s", ["abc"]) == "abc" <> String.duplicate(" ", 12))
     assert(sprintf("%015s", ["abc"]) == String.duplicate(" ", 12) <> "abc")
     assert(sprintf("%0s", ["abc"])   == "abc")
+
+    assert(sprintf("%s", ["測試"])    == "測試")
+    assert(sprintf("%15s", ["測試"])  == String.duplicate(" ", 13) <> "測試")
+    assert(sprintf("%-15s", ["測試"]) == "測試" <> String.duplicate(" ", 13))
+    assert(sprintf("%015s", ["測試"]) == String.duplicate(" ", 13) <> "測試")
+    assert(sprintf("%0s", ["測試"])   == "測試")
   end
 
   test "%f - float" do
@@ -134,10 +140,11 @@ defmodule ExPrintfTest do
 
   test "multiple format strings" do
     assert(parse_printf("%d %d") == "~w ~w")
-    assert(parse_printf("%d %s") == "~w ~s")
+    assert(parse_printf("%d %s") == "~w ~ts")
 
     assert(sprintf("%d %d", [10, 10])    == "10 10")
     assert(sprintf("%d %s", [10, "abc"]) == "10 abc")
+    assert(sprintf("%d %s", [10, "測試"]) == "10 測試")
   end
 
   test "no format strings" do

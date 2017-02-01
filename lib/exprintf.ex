@@ -110,7 +110,7 @@ defmodule ExPrintf do
 
           ?d -> parse_character("w", tail, acc, state)
           ?i -> parse_character("w", tail, acc, state)
-          ?s -> parse_character("s", tail, acc, state)
+          ?s -> parse_character("ts", tail, acc, state)
           ?f -> parse_character("f", tail, acc, state)
           ?g -> parse_character("g", tail, acc, state)
           ?c -> parse_character("c", tail, acc, state)
@@ -174,8 +174,9 @@ defmodule ExPrintf do
   
   defp do_handle_options(state, options) do
     # If we have digits with precision (e.g %0.4d) we interpret it as padding
-    if options[:digits] == true do
-      state = %{state | padding: true, width: state.precision, precision: 0}
+    state = case options[:digits] do
+      true -> %{state | padding: true, width: state.precision, precision: 0}
+      _    -> state
     end
     
     sign      = get_sign_chars(state.negative)
